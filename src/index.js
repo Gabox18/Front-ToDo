@@ -6,8 +6,10 @@ import reportWebVitals from "./reportWebVitals";
 
 import { Provider } from "react-redux";
 import store from "./redux/store.js";
-import {BrowserRouter} from 'react-router-dom'
+import { BrowserRouter } from "react-router-dom";
+import axios from "axios";
 
+axios.defaults.baseURL = "http://localhost:3001";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
@@ -15,7 +17,6 @@ root.render(
       <App />
     </Provider>
   </BrowserRouter>
-  
 );
 
 // If you want to start measuring performance in your app, pass a function

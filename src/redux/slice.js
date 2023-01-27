@@ -33,7 +33,7 @@ export const asyncPostTask = (Task) => {
       let response = await axios.post("/tasks/add", Task);
       return dispatch(postTask(response.data));
     } catch (error) {
-      console.log("erro en dispatch PostTodo", error);
+      console.log("error en dispatch PostTodo", error);
     }
   };
 };

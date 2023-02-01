@@ -2,26 +2,46 @@ import { Box, Button, Divider, FormControl, FormErrorMessage, FormHelperText, Fo
 import { useState } from "react"
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { asyncPostTask, asyncGetTask } from "../redux/slice.js"
+import { asyncPostTask, asyncGetTask, asyncDeleteTask } from "../redux/slice.js"
 
 function Home() {
     let dispatch = useDispatch()
     let { AllTask } = useSelector(state => state.TodoReducer)
 
-    const [input, setInput] = useState('')
-    const handleInputChange = (e) => setInput(e.target.value)
-    const isError = input === ''
+    const [input, setInput] = useState({
+        title: "",
+        description: ""
+    })
+    const handleInputChange = (e) => {
+        setInput({
+            ...input,
+            [e.target.name]: e.target.value,
+        })
+        console.log(input)
+    }
+    const isError = input.title === '' || input.description === ''
 
     useEffect(() => {
         dispatch(asyncGetTask())
     }, [dispatch])
 
-    function handleSubmit() {
-        dispatch(asyncPostTask({
-            title: "enviada desde el fronttttttt",
-            description: "prueba caiman"
-        }))
+    //-------------------------------------HANDLES-------------------------------------------------
+
+    function handleTaskSubmit() {
+        dispatch(asyncPostTask(input))
+        setTimeout(() => {
+            dispatch(asyncGetTask())
+        }, 100);
     }
+
+    function handleDeleteTask(id) {
+        dispatch(asyncDeleteTask(id))
+        setTimeout(() => {
+            dispatch(asyncGetTask())
+        }, 100);
+    }
+
+    //-----------------------------------------------------------------------------------------------
 
     return (
         <Box display={"flex"}>
@@ -29,7 +49,7 @@ function Home() {
                 <Heading>Add Task</Heading>
                 <FormControl isInvalid={isError}>
                     <FormLabel>Write a Title</FormLabel>
-                    <Input type='email' value={input} onChange={handleInputChange} />
+                    <Input type='text' name="title" value={input.title} onChange={handleInputChange} />
                     {!isError ? (
                         <FormHelperText>
                             The title is valid.
@@ -37,11 +57,21 @@ function Home() {
                     ) : (
                         <FormErrorMessage>Title is required.</FormErrorMessage>
                     )}
-                    <Button mt={4} colorScheme='teal' type='submit' onClick={handleSubmit}>
+
+                    <FormLabel>Description</FormLabel>
+                    <Input type='text' name="description" value={input.description} onChange={handleInputChange} />
+                    {!isError ? (
+                        <FormHelperText>
+                            The Description is valid.
+                        </FormHelperText>
+                    ) : (
+                        <FormErrorMessage>Title is required.</FormErrorMessage>
+                    )}
+
+                    <Button mt={4} colorScheme='teal' type='submit' onClick={handleTaskSubmit}>
                         Submit
                     </Button>
                 </FormControl>
-
             </Stack>
 
             <TableContainer w={'70%'} p='2rem'>
@@ -71,7 +101,7 @@ function Home() {
                                         <Stack direction={'row'}>
                                             <Button>Modify</Button>
                                             <Divider orientation="vertical" />
-                                            <Button>Delete</Button>
+                                            <Button onClick={() => handleDeleteTask(e._id)}>Delete</Button>
                                         </Stack>
                                     </Td>
                                 </Tr>

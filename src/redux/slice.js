@@ -3,6 +3,7 @@ import axios from "axios";
 const initialState = {
   AllTask: [],
   postTask: {},
+  deleteTask: "",
 };
 
 export const dataSlice = createSlice({
@@ -13,7 +14,10 @@ export const dataSlice = createSlice({
       state.AllTask = action.payload;
     },
     postTask: (state, action) => {
-      state.Task = action.payload;
+      state.postTask = action.payload;
+    },
+    deleteTask: (state, action) => {
+      state.deleteTask = action.payload;
     },
   },
 });
@@ -38,6 +42,15 @@ export const asyncPostTask = (Task) => {
   };
 };
 
-export const { postTask, getAllTask } = dataSlice.actions;
+export const asyncDeleteTask = (id) => {
+  return async function (dispatch) {
+    try {
+      let response = await axios.delete(`/tasks/delete/${id}`);
+      return dispatch(deleteTask(response.data));
+    } catch (error) {}
+  };
+};
+
+export const { postTask, getAllTask, deleteTask } = dataSlice.actions;
 
 export default dataSlice.reducer;

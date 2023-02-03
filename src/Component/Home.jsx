@@ -2,8 +2,8 @@ import { Box, Button, Divider, FormControl, FormErrorMessage, FormHelperText, Fo
 import { useState } from "react"
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { asyncPostTask, asyncGetTask, asyncDeleteTask } from "../redux/slice.js"
-
+import { asyncPostTask, asyncGetTask, asyncDeleteTask, asyncDone } from "../redux/slice.js"
+import { Link } from "react-router-dom"
 function Home() {
     let dispatch = useDispatch()
     let { AllTask } = useSelector(state => state.TodoReducer)
@@ -32,6 +32,10 @@ function Home() {
         setTimeout(() => {
             dispatch(asyncGetTask())
         }, 100);
+        setInput({
+            title: "",
+            description: ""
+        })
     }
 
     function handleDeleteTask(id) {
@@ -41,6 +45,12 @@ function Home() {
         }, 100);
     }
 
+    function handleDone(id) {
+        dispatch(asyncDone(id))
+        setTimeout(() => {
+            dispatch(asyncGetTask())
+        }, 100);
+    }
     //-----------------------------------------------------------------------------------------------
 
     return (
@@ -94,12 +104,12 @@ function Home() {
                                     <Td>{e.title}</Td>
                                     <Td>{e.description}</Td>
                                     <Td>{e.done
-                                        ? <Button>Done</Button>
-                                        : <Button>UnDone</Button>}
+                                        ? <Button onClick={() => handleDone(e._id)}>Done</Button>
+                                        : <Button onClick={() => handleDone(e._id)}>UnDone</Button>}
                                     </Td>
                                     <Td>
                                         <Stack direction={'row'}>
-                                            <Button>Modify</Button>
+                                            <Button><Link to={`/Edit/${e._id}`}>Modify</Link></Button>
                                             <Divider orientation="vertical" />
                                             <Button onClick={() => handleDeleteTask(e._id)}>Delete</Button>
                                         </Stack>

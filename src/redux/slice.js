@@ -2,8 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 const initialState = {
   AllTask: [],
-  postTask: {},
-  deleteTask: "",
+  post: {},
+  delete: "",
+  done: "",
+  edit: {},
 };
 
 export const dataSlice = createSlice({
@@ -14,10 +16,16 @@ export const dataSlice = createSlice({
       state.AllTask = action.payload;
     },
     postTask: (state, action) => {
-      state.postTask = action.payload;
+      state.post = action.payload;
     },
     deleteTask: (state, action) => {
-      state.deleteTask = action.payload;
+      state.delete = action.payload;
+    },
+    doneTask: (state, action) => {
+      state.done = action.payload;
+    },
+    editTask: (state, action) => {
+      state.edit = action.payload;
     },
   },
 });
@@ -27,7 +35,9 @@ export const asyncGetTask = () => {
     try {
       let response = await axios.get();
       return dispatch(getAllTask(response.data));
-    } catch (error) {}
+    } catch (error) {
+      console.log("error en dispatch getTask", error);
+    }
   };
 };
 
@@ -47,10 +57,35 @@ export const asyncDeleteTask = (id) => {
     try {
       let response = await axios.delete(`/tasks/delete/${id}`);
       return dispatch(deleteTask(response.data));
-    } catch (error) {}
+    } catch (error) {
+      console.log("error en dispatch DeleteTodo", error);
+    }
   };
 };
 
-export const { postTask, getAllTask, deleteTask } = dataSlice.actions;
+export const asyncDone = (id) => {
+  return async function (dispatch) {
+    try {
+      let response = await axios.put(`/tasks/done/${id}`);
+      return dispatch(doneTask(response.data));
+    } catch (error) {
+      console.log("error en dispatch done", error);
+    }
+  };
+};
+
+export const asyncEditTask = (id, taskUpdate) => {
+  return async function (dispatch) {
+    try {
+      let response = await axios.put(`/tasks/edit/${id}`, taskUpdate);
+      return dispatch(editTask(response.data));
+    } catch (error) {
+      console.log("error en dispatch editTask", error);
+    }
+  };
+};
+
+export const { postTask, getAllTask, deleteTask, doneTask, editTask } =
+  dataSlice.actions;
 
 export default dataSlice.reducer;

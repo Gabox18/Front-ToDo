@@ -1,7 +1,7 @@
 import { Box, Button, Heading, Input, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { asyncEditTask } from "../redux/slice";
 
 function EditTask() {
@@ -9,6 +9,7 @@ function EditTask() {
     const dispatch = useDispatch()
     let { AllTask } = useSelector(state => state.TodoReducer)
     let [task] = AllTask?.filter(e => e._id === id)
+    const navigate = useNavigate()
     const [input, setInput] = useState({
         title: task.title,
         description: task.description
@@ -23,6 +24,7 @@ function EditTask() {
 
     function handleSubmit(id, taskupdate) {
         dispatch(asyncEditTask(id, taskupdate))
+        navigate('/')
     }
 
     return (

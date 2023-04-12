@@ -17,9 +17,12 @@ function Home() {
             ...input,
             [e.target.name]: e.target.value,
         })
-        console.log(input)
+
     }
-    const isError = input.title === '' || input.description === ''
+    const isError = {
+        title: '',
+        description: ''
+    }
 
     useEffect(() => {
         dispatch(asyncGetTask())
@@ -61,13 +64,14 @@ function Home() {
                     <FormLabel>Write a Title</FormLabel>
                     <Input type='text' name="title" value={input.title} onChange={handleInputChange} />
                     {!isError ? (
-                        <FormHelperText>
+                        <FormHelperText color={'white'}>
                             The title is valid.
                         </FormHelperText>
                     ) : (
                         <FormErrorMessage>Title is required.</FormErrorMessage>
                     )}
-
+                </FormControl>
+                <FormControl isInvalid={isError}>
                     <FormLabel>Description</FormLabel>
                     <Input type='text' name="description" value={input.description} onChange={handleInputChange} />
                     {!isError ? (

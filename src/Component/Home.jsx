@@ -12,16 +12,23 @@ function Home() {
         title: "",
         description: ""
     })
+
+    const validate = (field, maxCharacter) => {
+        let message = {}
+        if (input[field] === '') message[field] = `${field} is required.`
+        if (input[field]?.length > maxCharacter) message[field] = `${field} Max ${maxCharacter} character`
+        return message
+    }
+
+    const isError = Object.keys(validate('title', 30)).length !== 0
+    const isError2 = Object.keys(validate('description', 80)).length !== 0
+
     const handleInputChange = (e) => {
         setInput({
             ...input,
             [e.target.name]: e.target.value,
         })
-
-    }
-    const isError = {
-        title: '',
-        description: ''
+        console.log(isError)
     }
 
     useEffect(() => {
@@ -68,18 +75,18 @@ function Home() {
                             The title is valid.
                         </FormHelperText>
                     ) : (
-                        <FormErrorMessage>Title is required.</FormErrorMessage>
+                        <FormErrorMessage>{validate('title', 30).title}</FormErrorMessage>
                     )}
                 </FormControl>
-                <FormControl isInvalid={isError}>
+                <FormControl isInvalid={isError2}>
                     <FormLabel>Description</FormLabel>
                     <Input type='text' name="description" value={input.description} onChange={handleInputChange} />
-                    {!isError ? (
-                        <FormHelperText>
+                    {!isError2 ? (
+                        <FormHelperText color={'white'}>
                             The Description is valid.
                         </FormHelperText>
                     ) : (
-                        <FormErrorMessage>Title is required.</FormErrorMessage>
+                        <FormErrorMessage>{validate('description', 80).description}</FormErrorMessage>
                     )}
 
                     <Button mt={4} colorScheme='teal' type='submit' onClick={handleTaskSubmit}>

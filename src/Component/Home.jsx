@@ -1,9 +1,12 @@
-import { Box, Button, Divider, FormControl, FormErrorMessage, FormHelperText, FormLabel, Heading, Input, Stack, Table, TableCaption, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react"
+import { Box, Button, Divider, FormControl, FormErrorMessage, FormHelperText, FormLabel, Heading, IconButton, Input, Stack, Table, TableCaption, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react"
 import { useState } from "react"
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { asyncPostTask, asyncGetTask, asyncDeleteTask, asyncDone } from "../redux/slice.js"
 import { Link } from "react-router-dom"
+import { BsFillCheckCircleFill, BsFillPenFill, BsFillTrash3Fill, BsFillXCircleFill } from 'react-icons/bs'
+import Navbar from "./Navbar.jsx"
+
 function Home() {
     let dispatch = useDispatch()
     let { AllTask } = useSelector(state => state.TodoReducer)
@@ -28,7 +31,6 @@ function Home() {
             ...input,
             [e.target.name]: e.target.value,
         })
-        console.log(isError)
     }
 
     useEffect(() => {
@@ -63,9 +65,10 @@ function Home() {
     }
     //-----------------------------------------------------------------------------------------------
 
-    return (
+    return (<>
+        <Navbar />
         <Box display={"flex"}>
-            <Stack bg={'teal'} w='30%' p={'2rem'} borderRadius='1rem' m={'2rem'}>
+            <Stack bg={'teal'} w='30%' p={'2rem'} borderRadius='1rem' m={'2rem'} h={'23rem'}>
                 <Heading>Add Task</Heading>
                 <FormControl isInvalid={isError}>
                     <FormLabel>Write a Title</FormLabel>
@@ -104,25 +107,33 @@ function Home() {
                             <Th>Title</Th>
                             <Th>Description</Th>
                             <Th>Done</Th>
-                            <Th>Actions</Th>
+                            <Th> &emsp; Actions</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
                         {AllTask.map((e, i) => {
                             return (
                                 <Tr key={i}>
-                                    <Td>{i}</Td>
-                                    <Td>{e.title}</Td>
-                                    <Td>{e.description}</Td>
+                                    <Td>{i + 1}</Td>
+                                    {e.done
+                                        ? <>
+                                            <Td><Text as={'del'}>{e.title}</Text></Td>
+                                            <Td><Text as={'del'}>{e.description}</Text></Td>
+                                        </>
+                                        : <>
+                                            <Td>{e.title}</Td>
+                                            <Td>{e.description}</Td>
+                                        </>
+                                    }
                                     <Td>{e.done
-                                        ? <Button onClick={() => handleDone(e._id)}>Done</Button>
-                                        : <Button onClick={() => handleDone(e._id)}>UnDone</Button>}
+                                        ? <IconButton icon={<BsFillCheckCircleFill size={"30px"} />} colorScheme="green" onClick={() => handleDone(e._id)}>Done</IconButton>
+                                        : <IconButton icon={<BsFillXCircleFill size={"20px"} />} onClick={() => handleDone(e._id)}>UnDone</IconButton>}
                                     </Td>
                                     <Td>
-                                        <Stack direction={'row'}>
-                                            <Button><Link to={`/Edit/${e._id}`}>Modify</Link></Button>
+                                        <Stack direction={'row'} >
+                                            <Link to={`/Edit/${e._id}`}><IconButton icon={<BsFillPenFill size={"20px"} />}>Modify</IconButton></Link>
                                             <Divider orientation="vertical" />
-                                            <Button onClick={() => handleDeleteTask(e._id)}>Delete</Button>
+                                            <IconButton icon={<BsFillTrash3Fill size={"20px"} />} onClick={() => handleDeleteTask(e._id)}>Delete</IconButton>
                                         </Stack>
                                     </Td>
                                 </Tr>
@@ -132,6 +143,7 @@ function Home() {
                 </Table>
             </TableContainer>
         </Box>
+    </>
     )
 }
 

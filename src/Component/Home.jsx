@@ -43,7 +43,7 @@ function Home() {
         dispatch(asyncPostTask(input))
         setTimeout(() => {
             dispatch(asyncGetTask())
-        }, 100);
+        }, 1000);
         setInput({
             title: "",
             description: ""

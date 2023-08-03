@@ -2,7 +2,7 @@ import { Box, Button, Divider, FormControl, FormErrorMessage, FormHelperText, Fo
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { asyncEditTask } from "../redux/slice";
+import { asyncEditTask, asyncGetTask } from "../redux/slice";
 
 function EditTask() {
     const { id } = useParams()
@@ -34,6 +34,9 @@ function EditTask() {
 
     function handleSubmit(id, taskupdate) {
         dispatch(asyncEditTask(id, taskupdate))
+        setTimeout(() => {
+            dispatch(asyncGetTask())
+        }, 500)
         navigate('/')
     }
 

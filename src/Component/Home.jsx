@@ -54,14 +54,14 @@ function Home() {
         dispatch(asyncDeleteTask(id))
         setTimeout(() => {
             dispatch(asyncGetTask())
-        }, 100);
+        }, 1000);
     }
 
     function handleDone(id) {
         dispatch(asyncDone(id))
         setTimeout(() => {
             dispatch(asyncGetTask())
-        }, 100);
+        }, 1000);
     }
     //-----------------------------------------------------------------------------------------------
 

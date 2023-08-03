@@ -10,7 +10,7 @@ import { BrowserRouter } from "react-router-dom";
 import axios from "axios";
 import { ChakraProvider } from "@chakra-ui/react";
 
-axios.defaults.baseURL = "https://servertodo-uhts.onrender.com/";
+axios.defaults.baseURL = "https://servertodo-uhts.onrender.com/"; // "http://localhost:3001/";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

@@ -1,5 +1,4 @@
 import { Route, Routes } from "react-router-dom";
-import "./App.css";
 import EditTask from "./Component/EditTask";
 import Home from "./Component/Home";
 

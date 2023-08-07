@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { asyncEditTask, asyncGetTask } from "../redux/slice";
+import Navbar from "./Navbar";
 
 function EditTask() {
     const { id } = useParams()
@@ -41,8 +42,9 @@ function EditTask() {
     }
 
     return (
-        <Box>
-            <Stack bg={'teal'} w='40%' p={'2rem'} borderRadius='1rem' m={'3rem auto'}>
+        <Box bg={'#1a202c'} h={'100vh'}>
+            <Navbar />
+            <Stack bg={'teal'} w={{ base: '90%', lg: '30%' }} p={'2rem'} borderRadius='1rem' m={'2rem auto'} h={'23rem'}>
                 <Heading>Edit Task</Heading>
                 <FormControl isInvalid={isError}>
                     <FormLabel>Write a Title</FormLabel>

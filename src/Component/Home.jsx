@@ -6,6 +6,7 @@ import { asyncPostTask, asyncGetTask, asyncDeleteTask, asyncDone } from "../redu
 import { Link } from "react-router-dom"
 import { BsFillCheckCircleFill, BsFillPenFill, BsFillTrash3Fill, BsFillXCircleFill } from 'react-icons/bs'
 import Navbar from "./Navbar.jsx"
+import Swal from 'sweetalert2';
 
 function Home() {
     let dispatch = useDispatch()
@@ -39,16 +40,34 @@ function Home() {
 
     //-------------------------------------HANDLES-------------------------------------------------
 
-    function handleTaskSubmit() {
-        dispatch(asyncPostTask(input))
-        setTimeout(() => {
-            dispatch(asyncGetTask())
-        }, 1000);
-        setInput({
-            title: "",
-            description: ""
-        })
+    function handleTaskSubmit(e) {
+        e.preventDefault()
+        if (isError || isError2) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Complete the required field.',
+                background: '#1a202a',
+            })
+        } else {
+            dispatch(asyncPostTask(input))
+            setTimeout(() => {
+                dispatch(asyncGetTask())
+            }, 1000);
+            setInput({
+                title: "",
+                description: ""
+            })
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Your work has been saved',
+                showConfirmButton: false,
+                timer: 1500
+            })
+        }
     }
+
 
     function handleDeleteTask(id) {
         dispatch(asyncDeleteTask(id))
@@ -97,6 +116,7 @@ function Home() {
                             Submit
                         </Button>
                     </FormControl>
+                    {handleTaskSubmit}
                 </Stack>
 
                 <TableContainer p={'3rem'} w={{ base: '100%', lg: '70%' }} m={{ base: 'auto', lg: '2rem auto', }} bg={'#1a202c'}>
